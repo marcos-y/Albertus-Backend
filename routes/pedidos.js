@@ -7,6 +7,7 @@ require('dotenv').config();
 const { insertarFicha } = require('../models/ficha');
 const { insertarFichaDetalle } = require('../models/fichaDetalle');
 
+
 /* GET pedidos */
 router.post('/verpedidos', async (req, res) => {
 
@@ -17,7 +18,7 @@ router.post('/verpedidos', async (req, res) => {
     const tipo_pedido = req.body.tipo_pedido;
     const idusua = JSON.parse(req.body.idusua);
     const idsuc = JSON.parse(req.body.idsuc);
-    
+
     const sql = `
      SELECT f.idfichas, 'CABECERA' AS idfd, f.idsucu, f.idusua, us.usuario, f.fecha, f.hora, f.tipo, f.estado, f.total,
             '' AS idprod, '' AS cantidad, '' AS precio, '' AS subtotal, '' AS art, '' AS artDes
@@ -38,7 +39,7 @@ router.post('/verpedidos', async (req, res) => {
 
     try {
 
-        const [rows] = await pool.query(sql, [tipo_pedido, idusua, idsuc,tipo_pedido, idusua, idsuc]);
+        const [rows] = await pool.query(sql, [tipo_pedido, idusua, idsuc, tipo_pedido, idusua, idsuc]);
 
         console.log(JSON.stringify(rows))
 
@@ -50,62 +51,46 @@ router.post('/verpedidos', async (req, res) => {
         throw error;
 
     }
-})
+});
 
-router.post('/ficha', async (req, res) => {
 
-    /*const ficha = req.body.ficha;
-    const detalle = req.body.detalle;*/
+/* GET products list*/
+router.post('/products', async (req, res) => {
 
-    const idsucu = req.body.idsucu;
-    const idusua = req.body.usua;
-    const fecha = new Date();
-    const Hora = req.body.Hora;
-    const tipo = req.body.ipo;
-    const estado = req.body.stado;
-    const total = req.body.total;
+    //const tipo_pedido = req.body.tipoPedido;
+    const tipo_lista = req.body.tipoLista;
+    const idlistaprecio = req.body.idlistaprecio;
 
-    const idprod = req.body.idprod;
-    const cantidad = req.body.cantidad;
-    const precio = req.body.precio;
-    const subtotal = req.body.subtotal;
+    //'TURNO MAÑANA'
+    //'LISTA PAN'
+    //'TODOS'
 
-    //--> una ficha tiene uno o muchos detalles
-
-    const ficha = {
-        //idfichas -> autoincrement,
-        idsucu,
-        idusua,
-        fecha,
-        Hora,
-        tipo,
-        estado,
-        total
-    }
-
-    const detalle = {
-        //idfd, -> id ficha detalle
-        //idfic, -> id ficha
-        idprod,
-        cantidad,
-        precio,
-        subtotal
-    }
+    const sql = `
+    SELECT articulo, DesCorta
+    FROM web.productos P, 
+    web.rlipr L, 
+    web.prod_turno R, 
+    web.turnos T 
+    WHERE P.idproducto=L.idproductos 
+    AND R.idprodt=P.idproducto 
+    AND R.idturp=T.idtur 
+    AND T.turno LIKE ?
+    AND L.idlistas= ?;
+    `;
 
     try {
-        // Insertar ficha
-        const resultFicha = await insertarFicha(ficha);
 
-        // Insertar detalle (puedes pasar resultFicha.insertId como idfic si usas AUTO_INCREMENT)
-        await insertarFichaDetalle({
-            ...detalle,
-            //idfic: ficha.idfichas  o resultFicha.insertId si AUTO_INCREMENT
-        });
+        const [rows] = await pool.query(sql, [tipo_lista , idlistaprecio]);
 
-        res.status(201).json({ message: 'Ficha y detalle insertados correctamente.' });
-    } catch (err) {
-        console.error('Error al insertar:', err);
-        res.status(500).json({ error: 'Error al insertar ficha o detalle.' });
+        console.log(JSON.stringify(rows))
+
+        res.send(rows)
+
+    } catch (error) {
+
+        console.error('Error en la consulta:', error);
+        throw error;
+
     }
 });
 
