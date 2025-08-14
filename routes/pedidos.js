@@ -58,15 +58,11 @@ router.post('/verpedidos', async (req, res) => {
 router.post('/products', async (req, res) => {
 
     //const tipo_pedido = req.body.tipoPedido;
-    const tipo_lista = req.body.tipoLista;
-    const idlistaprecio = req.body.idlistaprecio;
-
-    //'TURNO MAÑANA'
-    //'LISTA PAN'
-    //'TODOS'
+    const tipo_lista = req.body.tipo_lista;
+    const idlistaprecio = req.body.idsuc;
 
     const sql = `
-    SELECT articulo, DesCorta
+    SELECT articulo, DesCorta, precio, 0 AS cant
     FROM web.productos P, 
     web.rlipr L, 
     web.prod_turno R, 
@@ -81,8 +77,6 @@ router.post('/products', async (req, res) => {
     try {
 
         const [rows] = await pool.query(sql, [tipo_lista , idlistaprecio]);
-
-        console.log(JSON.stringify(rows))
 
         res.send(rows)
 
