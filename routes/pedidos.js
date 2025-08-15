@@ -62,7 +62,7 @@ router.post('/products', async (req, res) => {
     const idlistaprecio = req.body.idsuc;
 
     const sql = `
-    SELECT articulo, DesCorta, precio, 0 AS cant
+    SELECT articulo, idproducto, DesCorta, precio, 0 AS cant
     FROM web.productos P, 
     web.rlipr L, 
     web.prod_turno R, 
@@ -76,7 +76,7 @@ router.post('/products', async (req, res) => {
 
     try {
 
-        const [rows] = await pool.query(sql, [tipo_lista , idlistaprecio]);
+        const [rows] = await pool.query(sql, [tipo_lista, idlistaprecio]);
 
         res.send(rows)
 
@@ -87,5 +87,58 @@ router.post('/products', async (req, res) => {
 
     }
 });
+
+
+/* INSERT pedido */
+router.post('/insertPedido', async (req, res) => {
+
+    //Cabecera
+    let idsuc = req.body.idsuc;
+    let idusua = req.body.idusua;
+    let tipoPedido = req.body.tipoPedido;
+    let total = req.body.total;
+    let estado = req.body.estado;
+
+    //Detalle
+    let registros = [];
+    registros = JSON.parse(req.body.products);
+
+    try {
+
+        //---- INSERT Cabecera (ficha) ------
+        const valoresCab = `(${idsuc}, ${idusua}, '${tipoPedido}', '${estado}', ${total})`;
+        const sql = `INSERT INTO fichas (idsucu, idusua, tipo, estado, total) VALUES ${valoresCab};`;
+
+        await pool.query(sql);
+        console.log('Insert Ficha Finalizado')
+
+
+        //---- OBTENGO ultimo ID cabecera ---
+        const last_id = `SELECT idfichas FROM fichas ORDER BY idfichas DESC LIMIT 1`;
+        const idfichas = await pool.query(last_id);
+
+
+        //---- INSERT Detalle (ficha detalle) ----
+        const valoresDet = registros.map(r =>
+            `(${idfichas[0][0].idfichas}, '${r.idproducto}', ${r.cantidad}, ${r.precio}, ${r.cantidad * r.precio})`
+        ).join(", ");
+
+        const sql2 = `INSERT INTO fichadetalle (idfic, idprod, cantidad, precio, subtotal) VALUES ${valoresDet};`;
+
+        await pool.query(sql2);
+        console.log('Insert Ficha Detalle Finalizado');
+        res.json('Insertado exitosamente')
+
+        //-----------------------------------------
+
+    } catch (error) {
+
+        console.error('Error en la consulta:', error);
+        throw error;
+
+    }
+
+});
+
 
 module.exports = router;
