@@ -11,7 +11,7 @@ var usersRouter = require('./routes/users');
 var pedidosRouter = require('./routes/pedidos');
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: 'http://localhost:6003', credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
