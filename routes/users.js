@@ -25,6 +25,9 @@ router.post('/register', async (req, res) => {
 //--Login-- (datos USER que vienen desde el FRONTEND)
 router.post('/login', async (req, res) => {
 
+  console.log('User logueado:')
+  console.log(req.body)
+
   const { usuario, contra } = req.body;
 
   const [rows] = await pool.query('SELECT ' +
