@@ -30,6 +30,7 @@ router.post('/login', async (req, res) => {
 
   const { usuario, contra } = req.body;
 
+  /*
   const [rows] = await pool.query('SELECT ' +
     'US.iduser, ' +
     'US.usuario, ' +
@@ -45,7 +46,25 @@ router.post('/login', async (req, res) => {
     'usuarios US ' +
     'LEFT JOIN USU_SUCU ON USU_SUCU.idusu = US.iduser ' +
     'LEFT JOIN SUCURSALES SUC ON SUC.idSuc = USU_SUCU.idsuc ' +
-  'WHERE US.usuario = ? AND US.contra = ?', [usuario,contra]);
+  'WHERE US.usuario = ? AND US.contra = ?'
+  */
+
+   const [rows] = await pool.query('select ' +
+    'us.iduser, ' +
+    'us.usuario, ' +
+    'us.contra, ' +
+    'us.borra_usu, ' +
+    'us.tipo, ' +
+    'us.hacepedido, ' +
+    'us.vercc, ' +
+    'usu_sucu.idusu, ' +
+    'usu_sucu.idsuc, ' +
+    'suc.idlistaprecio ' +
+    'from ' +
+    'usuarios us ' +
+    'left join usu_sucu on usu_sucu.idusu = us.iduser ' +
+    'left join sucursales suc on suc.idsuc = usu_sucu.idsuc ' +
+  'where us.usuario = ? and us.contra = ', [usuario,contra]);
 
   const user = rows;
 
