@@ -23,6 +23,7 @@ const corsOptions = {
 //access-control-allow-credentials: true
 
 app.use(cors(corsOptions));
+app.options('*', cors());
 
 //app.use(cors({ origin: 'https://pedidos.albertus.com.ar', credentials: true }));
 app.use(express.json());
