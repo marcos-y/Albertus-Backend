@@ -11,7 +11,16 @@ var usersRouter = require('./routes/users');
 var pedidosRouter = require('./routes/pedidos');
 
 const app = express();
-app.use(cors({ origin: 'https://pedidos.albertus.com.ar', credentials: true }));
+
+const corsOptions = {
+  origin: 'https://pedidos.albertus.com.ar', // origen permitido
+  credentials: true, // solo si usas cookies o auth headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+};
+app.use(cors(corsOptions));
+
+//app.use(cors({ origin: 'https://pedidos.albertus.com.ar', credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
