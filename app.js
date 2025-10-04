@@ -14,10 +14,14 @@ const app = express();
 
 const corsOptions = {
   origin: 'https://pedidos.albertus.com.ar', // origen permitido
-  credentials: true, // solo si usas cookies o auth headers
+  credentials: false, // solo si usas cookies o auth headers
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 };
+
+//access-control-allow-origin: https://pedidos.albertus.com.ar
+//access-control-allow-credentials: true
+
 app.use(cors(corsOptions));
 
 //app.use(cors({ origin: 'https://pedidos.albertus.com.ar', credentials: true }));
