@@ -38,13 +38,13 @@ router.post('/login', async (req, res) => {
     'US.tipo, ' +
     'US.hacepedido, ' +
     'US.vercc, ' +
-    'USU_SUCU.idusu, ' +
-    'USU_SUCU.idsuc, ' +
+    'usu_sucu.idusu, ' +
+    'usu_sucu.idsuc, ' +
     'SUC.idlistaprecio ' +
     'from ' +
     'usuarios US ' +
-    'LEFT JOIN USU_SUCU ON USU_SUCU.idusu = US.iduser ' +
-    'LEFT JOIN SUCURSALES SUC ON SUC.idSuc = USU_SUCU.idsuc ' +
+    'LEFT JOIN usu_sucu ON usu_sucu.idusu = US.iduser ' +
+    'LEFT JOIN SUCURSALES SUC ON SUC.idSuc = usu_sucu.idsuc ' +
   'WHERE US.usuario = ? AND US.contra = ?', [usuario,contra]);
 
   const user = rows;
