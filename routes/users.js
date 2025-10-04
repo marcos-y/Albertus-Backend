@@ -64,7 +64,7 @@ router.post('/login', async (req, res) => {
     'usuarios us ' +
     'left join usu_sucu on usu_sucu.idusu = us.iduser ' +
     'left join sucursales suc on suc.idsuc = usu_sucu.idsuc ' +
-  'where us.usuario = ? and us.contra = ', [usuario,contra]);
+  'where us.usuario = ? and us.contra = ?', [usuario,contra]);
 
   const user = rows;
 
