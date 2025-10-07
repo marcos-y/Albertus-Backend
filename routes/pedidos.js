@@ -63,10 +63,10 @@ router.post('/products', async (req, res) => {
 
     const sql = `
     SELECT articulo, idproducto, DesCorta, precio, 0 AS cant
-    FROM web.productos P, 
-    web.rlipr L, 
-    web.prod_turno R, 
-    web.turnos T 
+    FROM productos P, 
+    rlipr L, 
+    prod_turno R, 
+    turnos T 
     WHERE P.idproducto=L.idproductos 
     AND R.idprodt=P.idproducto 
     AND R.idturp=T.idtur 
