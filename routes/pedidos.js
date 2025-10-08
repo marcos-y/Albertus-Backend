@@ -105,9 +105,17 @@ router.post('/insertPedido', async (req, res) => {
 
     try {
 
+        const now = new Date();
+
+        // Obtener la fecha en formato 'YYYY-MM-DD'
+        const fecha = now.toISOString().split('T')[0]; // ejemplo: '2025-10-08'
+
+        // Obtener la hora en formato 'HH:MM:SS'
+        const hora = now.toTimeString().split(' ')[0]; // ejemplo: '14:35:00'
+
         //---- INSERT Cabecera (ficha) ------
-        const valoresCab = `(${idsuc}, ${idusua}, '${tipoPedido}', '${estado}', ${total})`;
-        const sql = `INSERT INTO fichas (idsucu, idusua, tipo, estado, total) VALUES ${valoresCab};`;
+        const valoresCab = `(${idsuc}, ${idusua}, '${fecha}', '${hora}', '${tipoPedido}', '${estado}', ${total})`;
+        const sql = `INSERT INTO fichas (idsucu, idusua, fecha, hora, tipo, estado, total) VALUES ${valoresCab};`;
 
         await pool.query(sql);
         console.log('Insert Ficha Finalizado')

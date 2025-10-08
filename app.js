@@ -14,6 +14,7 @@ const app = express();
 
 const corsOptions = {
   origin: 'https://pedidos.albertus.com.ar',
+  //origin: 'http://localhost:3000',
   credentials: true, // IMPORTANTE: porque tu frontend usa withCredentials:true
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // incluir OPTIONS
   allowedHeaders: ['Content-Type', 'Authorization']
@@ -22,21 +23,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // que use la misma config
 
-
-// const corsOptions = {
-//   origin: 'https://pedidos.albertus.com.ar', // origen permitido
-//   credentials: false, // solo si usas cookies o auth headers
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   allowedHeaders: ['Content-Type', 'Authorization']
-// };
-// 
-// //access-control-allow-origin: https://pedidos.albertus.com.ar
-// //access-control-allow-credentials: true
-// 
-// app.use(cors(corsOptions));
-// app.options('*', cors());
-
-//app.use(cors({ origin: 'https://pedidos.albertus.com.ar', credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
