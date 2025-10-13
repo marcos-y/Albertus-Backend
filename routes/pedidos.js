@@ -57,9 +57,11 @@ router.post('/verpedidos', async (req, res) => {
 /* GET products list*/
 router.post('/products', async (req, res) => {
 
+    console.log(req.body)
+
     //const tipo_pedido = req.body.tipoPedido;
     const tipo_lista = req.body.tipo_lista;
-    const idlistaprecio = req.body.idsuc;
+    const idListapre = req.body.idListaPre;
 
     const sql = `
     SELECT articulo, idproducto, DesCorta, precio, 0 AS cant
@@ -76,7 +78,9 @@ router.post('/products', async (req, res) => {
 
     try {
 
-        const [rows] = await pool.query(sql, [tipo_lista, idlistaprecio]);
+        const [rows] = await pool.query(sql, [tipo_lista, idListapre]);
+
+        //console.log(JSON.stringify(rows))
 
         res.send(rows)
 
