@@ -57,14 +57,14 @@ router.post('/verpedidos', async (req, res) => {
 /* GET products list*/
 router.post('/products', async (req, res) => {
 
-    console.log(req.body)
+    //console.log(req.body)
 
     //const tipo_pedido = req.body.tipoPedido;
     const tipo_lista = req.body.tipo_lista;
     const idListapre = req.body.idListaPre;
 
     const sql = `
-    SELECT articulo, idproducto, DesCorta, precio, 0 AS cant
+    SELECT articulo, idproducto, DesCorta, precio, '' AS cantidad
     FROM productos P, 
     rlipr L, 
     prod_turno R, 
