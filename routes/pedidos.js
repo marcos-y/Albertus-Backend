@@ -73,7 +73,8 @@ router.post('/products', async (req, res) => {
     AND R.idprodt=P.idproducto 
     AND R.idturp=T.idtur 
     AND T.turno LIKE ?
-    AND L.idlistas= ?;
+    AND L.idlistas= ?
+    ORDER BY articulo;
     `;
 
     try {
