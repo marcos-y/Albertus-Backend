@@ -49,7 +49,7 @@ router.post('/login', async (req, res) => {
   'WHERE US.usuario = ? AND US.contra = ?'
   */
 
-   const [rows] = await pool.query('select ' +
+  const [rows] = await pool.query('select ' +
     'us.iduser, ' +
     'us.usuario, ' +
     'us.contra, ' +
@@ -64,16 +64,42 @@ router.post('/login', async (req, res) => {
     'usuarios us ' +
     'left join usu_sucu on usu_sucu.idusu = us.iduser ' +
     'left join sucursales suc on suc.idsuc = usu_sucu.idsuc ' +
-  'where us.usuario = ? and us.contra = ?', [usuario,contra]);
+    'where us.usuario = ? and (us.contra = ? or us.contra = " ") ', [usuario, contra]);
 
   const user = rows;
 
-  if( user.length > 0 ){
+  console.log(user)
+
+  if (user.length > 0 && user[0].contra != '') {
     console.log('logueado correctamente')
     res.send(user)
-  }else{
-    res.status(401).json({ error: 'Credenciales incorrectas' });
+
+  } else if (user.length > 0 && user[0].contra === '') {
+
+    res.status(403).json({ error: 'password_reset_required' });
   }
+  else {
+
+    res.status(401).json({ error: 'Credenciales incorrectas' });
+
+  }
+});
+
+
+//--Update password--
+router.post('/updatePassword', async (req, res) => {
+
+  const { contra, usuario } = req.body;
+
+  try {
+
+    await pool.query('UPDATE usuarios SET contra = ? WHERE usuario = ?', [contra, usuario]);
+    res.status(201).json({ message: 'Password Updated' });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+
 });
 
 module.exports = router;
