@@ -119,7 +119,10 @@ router.post('/insertPedido', async (req, res) => {
         const hora = now.toTimeString().split(' ')[0]; // ejemplo: '14:35:00'
 
         //---- INSERT Cabecera (ficha) ------
-        const valoresCab = `(${idsuc}, ${idusua}, '${fecha}', '${hora}', '${tipoPedido}', '${estado}', ${total})`;
+        //const valoresCab = `(${idsuc}, ${idusua}, '${fecha}', '${hora}', '${tipoPedido}', '${estado}', ${total})`;
+
+        const valoresCab = `(${idsuc}, ${idusua}, 'CURRENT_DATE()', 'CURRENT_TIME()', '${tipoPedido}', '${estado}', ${total})`;
+
         const sql = `INSERT INTO fichas (idsucu, idusua, fecha, hora, tipo, estado, total) VALUES ${valoresCab};`;
 
         await pool.query(sql);
